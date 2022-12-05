@@ -1,0 +1,68 @@
+﻿@page "/Todo2"
+
+<h3>Todo2 (@todos.Count(todo => !todo.IsDone)) </h3>
+
+<ul>
+    @foreach (var todo in todos)
+    {
+        <li>
+            <input type="checkbox" @bind="todo.IsDone"/>
+            <input @bind="todo.Title" />
+        </li>
+    }
+</ul>
+
+<input placeholder="Todo?" @bind="newTodo" />
+<button @onclick="AddTodo"> Add todo </button>
+<button @onclick="DeleteTodos">Delete</button>
+<button @onclick="Add5Todo">+5 Todo</button>
+<button @onclick="FilterEven">Alle even getallen</button>
+
+@code {
+    private List<TodoItem2> todos = new();
+    private string? newTodo;
+
+
+    private void FilterEven()
+    {
+
+        foreach (var todoRemove in todos)
+        {
+            if (todos.Count % 2 == 0)
+                todos.Remove(todoRemove);
+        }
+    }
+
+    
+    private void Add5Todo()
+    {
+        for (var i = 0; i< 5; i++)
+        {
+            todos.Add(new TodoItem2 { Title = i.ToString() });
+        }
+    }
+
+
+
+    private void DeleteTodos ()
+    {
+
+
+        var tododelete = todos.Where(t => t.IsDone).ToList();
+
+        foreach (var todoToRemove in tododelete)
+        {
+            todos.Remove(todoToRemove);
+        }
+    }
+
+    private void AddTodo()
+    {
+        if(!string.IsNullOrWhiteSpace(newTodo))
+        {
+            todos.Add(new TodoItem2 {Title = newTodo});
+            newTodo = string.Empty;
+        }
+    }
+
+}
